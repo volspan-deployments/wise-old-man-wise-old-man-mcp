@@ -35,6 +35,7 @@ async def search_players(query: str) -> dict:
     Use this when the user wants to find a player, look up stats, or get
     information about a specific OSRS account. The query is automatically
     trimmed and lowercased."""
+    _track("search_players")
     normalized_query = query.strip().lower()
     async with httpx.AsyncClient() as client:
         try:
@@ -76,6 +77,7 @@ async def search_groups(query: str) -> dict:
     """Search for groups on Wise Old Man by name. Use this when the user wants
     to find a clan, team, or group to view their competitions, members, or
     group hiscores."""
+    _track("search_groups")
     async with httpx.AsyncClient() as client:
         try:
             response = await client.get(
@@ -117,6 +119,7 @@ async def upload_profile_image(image_path: str) -> dict:
     """Upload a profile avatar image for a Wise Old Man player or group profile.
     The image is automatically resized and compressed to 120x120 pixels before
     being stored. Use this when the user wants to set or update a profile picture."""
+    _track("upload_profile_image")
     if not os.path.exists(image_path):
         return {
             "success": False,
@@ -160,6 +163,7 @@ async def upload_banner_image(image_path: str) -> dict:
     """Upload a banner image for a Wise Old Man group or profile page. The image
     is automatically resized and compressed to 1184x144 pixels before being stored.
     Use this when the user wants to set or update a profile or group banner."""
+    _track("upload_banner_image")
     if not os.path.exists(image_path):
         return {
             "success": False,
@@ -203,6 +207,7 @@ async def get_player_gains(username: str) -> dict:
     """Navigate to or retrieve the gains page for a specific OSRS player.
     Use this when the user wants to see how much XP or stats a player has
     gained over a period. Supports the RuneLite plugin redirect format."""
+    _track("get_player_gains")
     normalized_username = username.strip().lower()
     gains_url = f"{WOM_BASE_URL}/players/{normalized_username}/gained"
     async with httpx.AsyncClient() as client:
@@ -251,6 +256,7 @@ async def get_community_links(resource: str) -> dict:
     GitHub, Discord, Twitter/X, Patreon, API documentation, and country flag
     setup guide. Use this when the user asks how to contribute, join the
     community, support the project, or access the API docs."""
+    _track("get_community_links")
     links = {
         "github": {
             "url": "https://github.com/wise-old-man/wise-old-man",
@@ -303,6 +309,7 @@ async def get_community_links(resource: str) -> dict:
 
 @mcp.tool()
 async def get_leaderboards(
+    _track("get_leaderboards")
     leaderboard_type: str = "top",
     game_mode: Optional[str] = "main",
 ) -> dict:
@@ -372,6 +379,7 @@ async def get_leaderboards(
 
 @mcp.tool()
 async def get_recent_searches(
+    _track("get_recent_searches")
     action: str = "list",
     term: Optional[str] = None,
 ) -> dict:
